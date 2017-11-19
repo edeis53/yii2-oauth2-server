@@ -6,6 +6,11 @@ use \Yii;
 use yii\i18n\PhpMessageSource;
 use  \array_key_exists;
 
+//Fix bug when using Yii 2.13
+//https://github.com/Filsh/yii2-oauth2-server/issues/134
+//https://github.com/Filsh/yii2-oauth2-server/compare/e05fff97252f9e067cf0eae276ea36e9e87ae3e2...Marty-Macfly:2.0.2?diff=unified&name=2.0.2
+use yii\helpers\ArrayHelper;
+
 /**
  * For example,
  *
@@ -140,7 +145,7 @@ class Module extends \yii\base\Module
 
     public function getRequest()
     {
-        if(!$this->has('request')) {
+        if(!ArrayHelper::keyExists('request', $this->getComponents())) {
             $this->set('request', Request::createFromGlobals());
         }
         return $this->get('request');
@@ -148,7 +153,7 @@ class Module extends \yii\base\Module
 
     public function getResponse()
     {
-        if(!$this->has('response')) {
+        if(!ArrayHelper::keyExists('response', $this->getComponents())) {
             $this->set('response', new Response());
         }
         return $this->get('response');
